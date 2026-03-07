@@ -1,7 +1,7 @@
 # Focus Engine | Pandemonium 🔮
 
 ![Version](https://img.shields.io/badge/version-2.0-blueviolet)
-![License](https://img.shields.io/badge/license-MIT-green)
+![License](https://img.shields.io/badge/license-GPL--3.0-green)
 ![Platform](https://img.shields.io/badge/platform-web-brightgreen)
 ![Maintained](https://img.shields.io/badge/maintained-yes-success)
 
@@ -166,7 +166,7 @@ Userscripts are plain text – they can't contain executables. Any flag is a fal
 
 - `README.md` – This documentation
 - `main.js` – Main userscript (primary file)
-- `LICENSE` – MIT license
+- `LICENSE` – GPL-3.0 license
 
 ---
 
@@ -182,7 +182,7 @@ Userscripts are plain text – they can't contain executables. Any flag is a fal
 
 ## 📄 License
 
-MIT © [ishaansucksatlife](https://github.com/ishaansucksatlife)
+GPL-3.0 © [ishaansucksatlife](https://github.com/ishaansucksatlife)
 
 Free to use, modify, and share with attribution. Not for commercial exploitation.
 
