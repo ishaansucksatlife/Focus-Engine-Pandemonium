@@ -12,10 +12,6 @@
 A high‑end site blocker that locks your browser into focus mode or whitelist‑only mode.  
 Designed for deep concentration when you absolutely cannot afford distractions.
 
-<p align="center">
-  <img src="https://via.placeholder.com/800x400?text=Pandemonium+UI+Preview" alt="Pandemonium UI Preview" width="80%" style="border-radius: 20px; box-shadow: 0 20px 40px rgba(0,255,255,0.2);">
-</p>
-
 ---
 
 ## 📋 Table of Contents
