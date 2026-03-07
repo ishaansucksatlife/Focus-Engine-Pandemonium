@@ -28,7 +28,7 @@
         STORAGE_KEYS: ['bl', 'wl', 'deep', 'startTime']
     };
  
-    // ==================== PERSISTENCE (ERROR‑PROOF) ====================
+    // ==================== PERSISTENCE ====================
     const DB = {
         get: (key, defaultValue) => {
             try {
@@ -366,7 +366,7 @@
         return true;
     };
  
-    // ==================== GUI CREATION (FULL) ====================
+    // ==================== GUI CREATION ====================
     const createGUI = () => {
         if (!shadow) return;
         try {
