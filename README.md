@@ -8,6 +8,7 @@
 [![Tampermonkey](https://img.shields.io/badge/Tampermonkey-compatible-brightgreen)](https://www.tampermonkey.net/)
 [![Violentmonkey](https://img.shields.io/badge/Violentmonkey-compatible-orange)](https://violentmonkey.github.io/)
 [![Greasemonkey](https://img.shields.io/badge/Greasemonkey-compatible-lightgrey)](https://www.greasespot.net/)
+[![GreasyFork](https://img.shields.io/badge/GreasyFork-available-670000)](https://greasyfork.org/en/scripts/568636-focus-engine-pandemonium)
 
 A high‑end site blocker that locks your browser into focus mode or whitelist‑only mode.  
 Designed for deep concentration when you absolutely cannot afford distractions.
@@ -65,12 +66,18 @@ Choose one:
 
 ### 2. Install the Script
 
-**Option A – Direct Install**  
-👉 [Click here to install](https://github.com/ishaansucksatlife/Focus-Engine-Pandemonium/raw/main/main.js) *(once raw link is active)*
+You have three convenient options to install:
 
-**Option B – Manual Install**  
+**Option A – Install from GreasyFork** (Recommended for most users)  
+👉 Visit the official script page and click the install button:  
+[**Focus Engine on GreasyFork**](https://greasyfork.org/en/scripts/568636-focus-engine-pandemonium)
+
+**Option B – Direct Install from GitHub**  
+👉 [Click here to install](https://github.com/ishaansucksatlife/Focus-Engine-Pandemonium/raw/main/main.js) directly from the source.
+
+**Option C – Manual Install**  
 - Copy the entire code from [`main.js`](main.js)
-- Create a new script in your manager and paste
+- Create a new script in your manager and paste the code.
 
 ### 3. Start Focusing
 
@@ -173,9 +180,11 @@ Userscripts are plain text – they can't contain executables. Any flag is a fal
 ## 🤝 Support & Community
 
 [![Discord](https://img.shields.io/badge/Discord-Join%20Server-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/invite/HazvsVHxyE)
+[![GreasyFork](https://img.shields.io/badge/GreasyFork-Script%20Page-670000?style=for-the-badge&logo=tampermonkey&logoColor=white)](https://greasyfork.org/en/scripts/568636-focus-engine-pandemonium)
 
 - 🐛 **Bug Reports** – [Open an issue](https://github.com/ishaansucksatlife/Focus-Engine-Pandemonium/issues)
 - 💡 **Feature Requests** – Start a [discussion](https://github.com/ishaansucksatlife/Focus-Engine-Pandemonium/discussions)
+- 📦 **Script Page** – [Focus Engine on GreasyFork](https://greasyfork.org/en/scripts/568636-focus-engine-pandemonium)
 - 🙋 **General Help** – Ask in our Discord
 
 ---
@@ -198,4 +207,4 @@ Because focus isn't optional – it's survival.
 
 ## 🏷️ Tags
 
-`productivity` `focus` `site-blocker` `userscript` `tampermonkey` `deep-work` `distraction-free` `javascript` `concentration` `willpower`
+`productivity` `focus` `site-blocker` `userscript` `tampermonkey` `greasyfork` `deep-work` `distraction-free` `javascript` `concentration` `willpower`
