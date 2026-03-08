@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Focus Engine | Pandemonium
 // @namespace    https://github.com/ishaansucksatlife/Focus-Engine-Pandemonium
-// @version      2.0
+// @version      34.0
 // @description  A high‑end site blocker that locks your browser into focus mode or whitelist‑only mode. Designed for deep concentration when you absolutely cannot afford distractions.
 // @author       ishaansucksatlife
 // @match        *://*/*
@@ -10,15 +10,14 @@
 // @grant        GM_deleteValue
 // @grant        GM_listValues
 // @run-at       document-start
-// @license      GPL-3.0
+// @license      MIT
 // @supportURL   https://github.com/ishaansucksatlife/Focus-Engine-Pandemonium/issues
 // @homepageURL  https://github.com/ishaansucksatlife/Focus-Engine-Pandemonium
-// @source       https://github.com/ishaansucksatlife/Focus-Engine-Pandemonium
 // ==/UserScript==
- 
+
 (function() {
     'use strict';
- 
+
     // ==================== CONFIGURATION ====================
     const CONFIG = {
         VERSION: '34.0',
@@ -27,8 +26,8 @@
         TIMER_UPDATE_INTERVAL: 1000,
         STORAGE_KEYS: ['bl', 'wl', 'deep', 'startTime']
     };
- 
-    // ==================== PERSISTENCE ====================
+
+    // ==================== PERSISTENCE (ERROR‑PROOF) ====================
     const DB = {
         get: (key, defaultValue) => {
             try {
@@ -60,7 +59,7 @@
             } catch {}
         }
     };
- 
+
     // ==================== STATE ====================
     let pndm = {
         bl: DB.get('bl', []),
@@ -74,17 +73,17 @@
     let isInitialized = false;
     let animationFrame = null;
     let guiVisible = false;
- 
+
     // ==================== HELPER FUNCTIONS ====================
     const getCurrentHost = () => window.location.hostname.toLowerCase().replace(/^www\./, '');
- 
+
     const isMatched = (arr) => {
         const host = getCurrentHost();
         return arr.some(kw => kw && typeof kw === 'string' && host.includes(kw.toLowerCase().trim()));
     };
- 
+
     const isBlocked = () => pndm.deep ? !isMatched(pndm.wl) : isMatched(pndm.bl);
- 
+
     const getFlowTime = () => {
         if (!pndm.startTime || pndm.startTime > Date.now()) return "00:00:00";
         const diff = Date.now() - pndm.startTime;
@@ -93,21 +92,22 @@
         const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
         return `${h}:${m}:${s}`;
     };
- 
+
     const getHostStatus = () => {
         const host = getCurrentHost();
         if (pndm.deep) return pndm.wl.includes(host) ? 'sanctuary' : 'void';
         return pndm.bl.includes(host) ? 'blackhole' : 'normal';
     };
- 
+
     const isHostInCurrentList = () => {
         const host = getCurrentHost();
         return pndm.deep ? pndm.wl.includes(host) : pndm.bl.includes(host);
     };
- 
+
+    // Safe DOM operations (never throw)
     const safeQS = (el, sel) => { try { return el ? el.querySelector(sel) : null; } catch { return null; } };
     const safeAdd = (el, ev, fn) => { if (el && typeof el.addEventListener === 'function') el.addEventListener(ev, fn); };
- 
+
     // ==================== SHADOW DOM SETUP ====================
     const setupShadowDOM = () => {
         if (isInitialized) return;
@@ -131,14 +131,14 @@
             }, 0);
         }
     };
- 
+
     // ==================== MASTER STYLESHEET ====================
     const createStyles = () => {
         const ss = new CSSStyleSheet();
         ss.replaceSync(`
             @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;700;900&display=swap');
             * { font-family: 'Inter', sans-serif; box-sizing: border-box; margin:0; padding:0; }
- 
+
             /* ----- VOID OVERLAY (REDESIGNED) ----- */
             #pndm-void-overlay {
                 position: fixed;
@@ -256,8 +256,8 @@
                 margin-top: 30px;
                 letter-spacing: 1px;
             }
- 
-            /* ----- GUI ----- */
+
+            /* ----- GUI (unchanged from previous perfection) ----- */
             #pndm-gui-wrapper {
                 position:fixed; top:0; left:0; width:100vw; height:100vh;
                 background:rgba(0,0,0,0.85); backdrop-filter:blur(50px);
@@ -326,7 +326,7 @@
         `);
         return ss;
     };
- 
+
     // ==================== TOAST ====================
     const showToast = (msg, isErr = false) => {
         if (!shadow) return;
@@ -342,7 +342,7 @@
             }
         }, 2000);
     };
- 
+
     // ==================== MUTUAL EXCLUSIVITY ====================
     const addKeywordExclusive = (keyword, targetList) => {
         keyword = keyword.toLowerCase().trim();
@@ -359,23 +359,23 @@
         pndm[targetList] = [...pndm[targetList], keyword];
         return true;
     };
- 
+
     const removeKeyword = (keyword, list) => {
         if (!pndm[list].includes(keyword)) return false;
         pndm[list] = pndm[list].filter(k => k !== keyword);
         return true;
     };
- 
-    // ==================== GUI CREATION ====================
+
+    // ==================== GUI CREATION (FULL) ====================
     const createGUI = () => {
         if (!shadow) return;
         try {
             while (shadow.firstChild) shadow.removeChild(shadow.firstChild);
- 
+
             const host = getCurrentHost();
             const status = getHostStatus();
             const inList = isHostInCurrentList();
- 
+
             const wrapper = document.createElement('div');
             wrapper.id = 'pndm-gui-wrapper';
             wrapper.innerHTML = `
@@ -438,14 +438,14 @@
                 </div>
                 <div id="led" class="${pndm.deep ? 'deep-active' : 'normal'}" title="${pndm.deep ? 'Deep Focus Active' : 'Normal Mode'}"></div>
             `;
- 
+
             shadow.adoptedStyleSheets = [createStyles()];
             shadow.appendChild(wrapper);
- 
+
             // --- Event listeners ---
             safeAdd(safeQS(shadow, '#close-gui'), 'click', toggleGUI);
             safeAdd(safeQS(shadow, '#reload-btn'), 'click', () => { showToast('⟳ Reloading...'); setTimeout(() => location.reload(), 100); });
- 
+
             const toggleBtn = safeQS(shadow, '#toggle-host-btn');
             if (toggleBtn) safeAdd(toggleBtn, 'click', () => {
                 const h = getCurrentHost();
@@ -459,14 +459,14 @@
                 }
                 save(); enforceVoid(); updateDynamicUI(); renderLists();
             });
- 
+
             const deepTog = safeQS(shadow, '#deep-tog');
             if (deepTog) safeAdd(deepTog, 'change', (e) => {
                 pndm.deep = e.target.checked;
                 save(); enforceVoid(); updateDynamicUI();
                 showToast(pndm.deep ? '🔮 Deep Focus ACTIVE' : '🌐 Deep Focus inactive');
             });
- 
+
             // Blackhole buttons
             const blAdd = safeQS(shadow, '#bl-add-current');
             if (blAdd) safeAdd(blAdd, 'click', () => {
@@ -484,7 +484,7 @@
                     showToast(`✖️ Removed "${h}" from Blackhole`);
                 }
             });
- 
+
             // Sanctuary buttons
             const wlAdd = safeQS(shadow, '#wl-add-current');
             if (wlAdd) safeAdd(wlAdd, 'click', () => {
@@ -502,13 +502,13 @@
                     showToast(`✖️ Removed "${h}" from Sanctuary`);
                 }
             });
- 
+
             // Clear buttons
             const clearBl = safeQS(shadow, '#clear-bl');
             if (clearBl) safeAdd(clearBl, 'click', () => { pndm.bl = []; save(); renderLists(); updateDynamicUI(); showToast('🗑️ Blackhole cleared'); });
             const clearWl = safeQS(shadow, '#clear-wl');
             if (clearWl) safeAdd(clearWl, 'click', () => { pndm.wl = []; save(); renderLists(); updateDynamicUI(); showToast('🗑️ Sanctuary cleared'); });
- 
+
             // Tab switching
             shadow.querySelectorAll('.tab').forEach(tab => safeAdd(tab, 'click', () => {
                 shadow.querySelectorAll('.tab, .pane').forEach(el => el.classList.remove('active'));
@@ -516,7 +516,7 @@
                 const pane = shadow.getElementById(`pane-${tab.dataset.t}`);
                 if (pane) pane.classList.add('active');
             }));
- 
+
             // Input handlers
             const setupInput = (id, list, display) => {
                 const inp = safeQS(shadow, id);
@@ -534,12 +534,12 @@
             };
             setupInput('#bl-in', 'bl', 'Blackhole');
             setupInput('#wl-in', 'wl', 'Sanctuary');
- 
+
             renderLists();
             updateDynamicUI();
         } catch (e) { console.error('[Pandemonium] GUI error:', e); }
     };
- 
+
     // ==================== RENDER LISTS ====================
     const renderLists = () => {
         if (!shadow) return;
@@ -561,9 +561,9 @@
         render(pndm.bl, '#bl-list', 'bl');
         render(pndm.wl, '#wl-list', 'wl');
     };
- 
+
     const escapeHTML = (str) => String(str).replace(/[&<>"']/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;' })[m]);
- 
+
     // ==================== DYNAMIC UI UPDATE ====================
     const updateDynamicUI = () => {
         if (!shadow || !guiVisible) return;
@@ -571,7 +571,7 @@
             const host = getCurrentHost();
             const status = getHostStatus();
             const inList = isHostInCurrentList();
- 
+
             const statusChip = safeQS(shadow, '#status-chip');
             const statusText = safeQS(shadow, '#status-text');
             if (statusChip && statusText) {
@@ -580,16 +580,16 @@
                 }`;
                 statusText.textContent = status.toUpperCase();
             }
- 
+
             const toggleBtn = safeQS(shadow, '#toggle-host-btn');
             if (toggleBtn) {
                 toggleBtn.textContent = inList ? '⚡ RELEASE' : '🌀 ABSORB';
                 toggleBtn.className = `action-btn ${inList ? 'btn-danger' : 'btn-primary'}`;
             }
- 
+
             const deepTog = safeQS(shadow, '#deep-tog');
             if (deepTog) deepTog.checked = pndm.deep;
- 
+
             // Tab counters
             const blTab = Array.from(shadow.querySelectorAll('.tab')).find(t => t.dataset.t === 'bl');
             const wlTab = Array.from(shadow.querySelectorAll('.tab')).find(t => t.dataset.t === 'wl');
@@ -605,14 +605,14 @@
                 span.textContent = pndm.wl.length;
                 span.style.cssText = "color:#0ff; margin-left:5px;";
             }
- 
+
             // LED
             const led = safeQS(shadow, '#led');
             if (led) {
                 led.className = pndm.deep ? 'deep-active' : 'normal';
                 led.title = pndm.deep ? 'Deep Focus Active' : 'Normal Mode';
             }
- 
+
             // Enable/disable remove buttons
             const blRemove = safeQS(shadow, '#bl-remove-current');
             if (blRemove) {
@@ -626,7 +626,7 @@
             }
         } catch (e) { console.error('[Pandemonium] UI update error:', e); }
     };
- 
+
     // ==================== GUI TOGGLE ====================
     const toggleGUI = () => {
         if (!shadow) return;
@@ -638,7 +638,7 @@
             if (guiVisible) { updateDynamicUI(); renderLists(); }
         } catch (e) { console.error('[Pandemonium] Toggle error:', e); }
     };
- 
+
     // ==================== SYNC GUI (TIMER) ====================
     const syncGUI = () => {
         if (!shadow) return;
@@ -649,8 +649,8 @@
         const vt = safeQS(shadow, '#v-time');
         if (vt) vt.textContent = getFlowTime();
     };
- 
-    // ==================== VOID OVERLAY ====================
+
+    // ==================== IMPROVED VOID OVERLAY ====================
     const ensureVoidOverlay = () => {
         if (!shadow) return;
         let overlay = safeQS(shadow, '#pndm-void-overlay');
@@ -673,7 +673,7 @@
         const timerSpan = safeQS(shadow, '#v-time');
         if (timerSpan) timerSpan.textContent = getFlowTime();
     };
- 
+
     // ==================== VOID ENFORCEMENT ====================
     const enforceVoid = () => {
         if (!isInitialized) return;
@@ -694,7 +694,7 @@
                     if (!link.parentNode) { link.rel = 'icon'; document.head.appendChild(link); }
                     link.href = CONFIG.VOID_ICON;
                 } catch {}
- 
+
                 if (shadow) ensureVoidOverlay();
             } else {
                 if (shadow) {
@@ -706,7 +706,7 @@
             }
         } catch (e) { console.error('[Pandemonium] Enforcement error:', e); }
     };
- 
+
     // ==================== SAVE STATE ====================
     const save = () => {
         try {
@@ -716,7 +716,7 @@
             DB.set('startTime', pndm.startTime);
         } catch {}
     };
- 
+
     // ==================== INITIALIZATION ====================
     const init = () => {
         try {
@@ -735,9 +735,9 @@
             console.log('[Pandemonium] v34.0 ready');
         } catch (e) { console.error('[Pandemonium] Init error:', e); }
     };
- 
+
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
     else init();
- 
+
     window.addEventListener('beforeunload', () => { if (animationFrame) cancelAnimationFrame(animationFrame); });
 })();
