@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Focus Engine | Pandemonium
 // @namespace    https://github.com/ishaansucksatlife/Focus-Engine-Pandemonium
-// @version      34.0
+// @version      3.0
 // @description  A high‑end site blocker that locks your browser into focus mode or whitelist‑only mode. Designed for deep concentration when you absolutely cannot afford distractions.
 // @author       ishaansucksatlife
 // @match        *://*/*
