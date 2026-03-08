@@ -20,7 +20,7 @@
 
     // ==================== CONFIGURATION ====================
     const CONFIG = {
-        VERSION: '34.0',
+        VERSION: '3.0',
         KEY_PREFIX: 'pndm_v34_',
         VOID_ICON: 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%23000\' stroke=\'%230ff\' stroke-width=\'2\'/%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'5\' fill=\'%230ff\'/%3E%3C/svg%3E',
         TIMER_UPDATE_INTERVAL: 1000,
