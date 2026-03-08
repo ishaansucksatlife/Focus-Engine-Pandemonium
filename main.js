@@ -27,7 +27,7 @@
         STORAGE_KEYS: ['bl', 'wl', 'deep', 'startTime']
     };
 
-    // ==================== PERSISTENCE (ERROR‑PROOF) ====================
+    // ==================== PERSISTENCE ====================
     const DB = {
         get: (key, defaultValue) => {
             try {
@@ -104,7 +104,7 @@
         return pndm.deep ? pndm.wl.includes(host) : pndm.bl.includes(host);
     };
 
-    // Safe DOM operations (never throw)
+    // Safe DOM operations
     const safeQS = (el, sel) => { try { return el ? el.querySelector(sel) : null; } catch { return null; } };
     const safeAdd = (el, ev, fn) => { if (el && typeof el.addEventListener === 'function') el.addEventListener(ev, fn); };
 
@@ -366,7 +366,7 @@
         return true;
     };
 
-    // ==================== GUI CREATION (FULL) ====================
+    // ==================== GUI CREATION ====================
     const createGUI = () => {
         if (!shadow) return;
         try {
